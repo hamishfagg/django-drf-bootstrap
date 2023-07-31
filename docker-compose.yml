@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  # Configures a local simulated mail server to receive and view sent email as a dev
+  smtp-server:
+    image: mailhog/mailhog
+    expose:
+      - 1025
+      - 8025
+    ports:
+      - '1025:1025'
+      - '8025:8025'
+
+  django:
+    working_dir: /code
+    entrypoint:
+      - /bin/sh
+    command:
+      - "-c"
+      - "./manage.py migrate && ./manage.py runserver 0.0.0.0:8000"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '8000:8000'
+    platform: linux/x86_64 # Helps ensure consistency even when used on an M1 Mac
+    volumes:
+      - .:/code
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1

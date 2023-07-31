@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -25,7 +24,7 @@ SECRET_KEY = "django-insecure-h!ns@z^&7^7l589r&j)oer_)$@5&%!j!b8pz$mgc$w2vue-=iv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 AUTH_USER_MODEL = "user.User"
 
@@ -76,8 +75,13 @@ DJOSER = {
     'SERIALIZERS': {
         'user': 'django_drf_bootstrap.user.serializers.UserSerializer',
         'current_user': 'django_drf_bootstrap.user.serializers.UserSerializer',
-    }
+    },
+    'SEND_ACTIVATION_EMAIL': True,
+    'ACTIVATION_URL': '#/activate/{uid}/{token}'
 }
+
+EMAIL_HOST = "smtp-server"
+EMAIL_PORT = 1025
 
 TEMPLATES = [
     {

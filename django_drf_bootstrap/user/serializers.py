@@ -7,4 +7,4 @@ class UserSerializer(djoser_serializers.UserSerializer):
 
     class Meta:
         model = User
-        fields = ['id', 'username']
+        fields = ["id", "username", "email"]

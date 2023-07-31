@@ -1,5 +1,7 @@
 # Django DRF Bootstrap
 
+
+## Models
 This Django project exists to make bootstrapping a rest API in django faster. Only two models exist:
 - `User`
   - Has an email, username, and password
@@ -11,9 +13,13 @@ This Django project exists to make bootstrapping a rest API in django faster. On
   - Anyone can read all notes in the DB
   - Admins can edit all notes in the DB
 
+
+## What this project provides
 The project includes a number of commonly-needed libraries and concepts already set up:
 - Django Rest Framework installed/configured basically
-- [Djoser library](https://djoser.readthedocs.io/en/latest/) used for token authentication and handling of email valdation/password reset. 
+- [Djoser library](https://djoser.readthedocs.io/en/latest/) used for token authentication and handling of email valdation/password reset.
+  - Users are required to confirm their email after creating an account or updating their email
+  - Emails are sent to a local mailhog instance by default (use the provided docker-compose to run both django and mailhog)
 - Custom user model configured, ready for more fields to be added
 - [DRF-Spectacular](https://drf-spectacular.readthedocs.io/en/latest/) set up to automatically generate swagger docs at `/api-docs`
 - Custom permissions added for `IsOwner` and `ReadOnly`.
@@ -22,9 +28,7 @@ The project includes a number of commonly-needed libraries and concepts already 
   - Permissions can be composed with bitwise operators:
     ```python
     class NoteViewSet(viewsets.ModelViewSet):
-        queryset = Note.objects.all()
-        serializer_class = NoteSerializer
-
+        ...
         # Compose permissions so that:
         # Admins:
         #   - Can read any note
@@ -41,11 +45,14 @@ The project includes a number of commonly-needed libraries and concepts already 
     ```python
     class NoteSerializer(WriteOnceMixin, serializers.ModelSerializer):
         class Meta:
-            model = Note
-            fields = '__all__'
+            ...
             read_only_fields = ('id', 'user', 'created_at')
             write_once_fields = ('name',)
     ```
   - This is useful e.g. when creating comment replies etc, where a user should be able to specify what they're replying to, but not change that later.
 
-todo: email address in users table, email validation etc
+## Running
+
+You can run this project and a local mail server for verification emails etc using the provided docker-compose file:
+
+`docker-compose up`
